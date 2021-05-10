@@ -1,0 +1,8 @@
+Debug/
+x64/
+Release/*.pdb
+Release/*.dll.meta*
+app.*
+Enh*.cpp 
+Enh*.vcx*
+Resource.h
