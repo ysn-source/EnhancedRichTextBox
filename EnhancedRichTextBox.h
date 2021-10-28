@@ -42,7 +42,7 @@ public:
 		__super::List();
 		this->AddRange(arrKeyword);
 	}
-	KeywordList(int r, int g, int b, List<String^>^ arrKeyword) {
+	KeywordList(int r, int g, int b, List<String^>^ %arrKeyword) {
 		this->r = r;
 		this->g = g;
 		this->b = b;
@@ -59,19 +59,31 @@ public:
 */
 public ref class EnhancedRichTextBox : public RichTextBox
 {
+
+private: System::ComponentModel::ComponentResourceManager^ resources;
+private: System::ComponentModel::IContainer^  components;
 public:
 	EnhancedRichTextBox();
 	~EnhancedRichTextBox() {}
-	
-	List<KeywordList^>^ Keywords;
-	cli::array<wchar_t>^ Delims;
-		
+	Void AddKeyword(String ^str, int r, int g, int b);
+	bool DelKeyword(String ^str);
+	KeywordList ^AddKeywordList(List<String ^>^lstr, int r, int g, int b);
+	bool DelKeywordList(List<String ^>^lstr);
+	KeywordList ^KeywordListExists(int r, int g, int b);
+#pragma region Windows Form Designer generated code
+	void InitializeComponent() {
+		this->components = (gcnew System::ComponentModel::Container());
+		this->resources = (gcnew System::ComponentModel::ComponentResourceManager(EnhancedRichTextBox::typeid));
+	}
+#pragma end region
+	List<KeywordList^>^ Keywords;	
 private:
 	ListBox ^_internalListBox;
 	LastWord ^_lWord;
 	int _lastKeyPressed;
+	int lastSelectionStart;
 	cli::array<String^, 1>^ _latestRTF = gcnew cli::array<String^, 1>(4);
-
+	cli::array<wchar_t,1>^ delims;
 	/*
 	*  Events : ListBox
 	*/
@@ -85,19 +97,19 @@ private:
 	*/
 	System::Void enh_TextChanged(System::Object^  sender, System::EventArgs ^e);
 	System::Void enh_KeyDown(System::Object^  sender, System::Windows::Forms::KeyEventArgs^  e);
-
+	System::Void enh_KeyUp(System::Object^  sender, System::Windows::Forms::KeyEventArgs^  e);
 	/*
 	*  String Util
 	*/
-	String ^buildHeaderColors();
+	String ^ColorTable();
+	String ^AddColorTable();
+	String ^AddColorTable(String ^rtf);
 
-	String ^AddColorHeaders();
-	String ^AddColorHeaders(String ^rtf);
-	String ^Replacer(String ^newWord, int x, int y);
+	String ^WordReplacer(String ^newWord, int x, int y);
 
 	Void FilterByKey(ListBox^lb, String^srch);
-	String ^WithColor(String^str);
-	String ^WithColor(String^srch, bool bEndSpace);
+	String ^WordColorize(String^str);
+	String ^WordColorize(String^srch, bool bEndSpace);
 
 	String ^getHeader();
 	String ^getHeader(bool bWithColor);
@@ -107,4 +119,6 @@ private:
 
 	Point ^GetLastWord([Runtime::InteropServices::Out] String^ %s);
 	Point ^GetLastWord([Runtime::InteropServices::Out] String^ %s, int before);
+
+	System::Void enh_pastify();
 };
